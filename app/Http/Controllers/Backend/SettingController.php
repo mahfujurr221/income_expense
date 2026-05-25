@@ -23,71 +23,47 @@ class SettingController extends Controller
     public function update(Request $request, string $id)
     {
         $setting = Setting::first();
-        // basic information
-        if ($request->update_section == 'basic_information') {
-            $setting->site_name = $request->site_name;
-            $setting->site_title = $request->site_title;
-            $setting->address = $request->address;
-            $setting->address2 = $request->address2;
-            $setting->phone = $request->phone;
-            $setting->email = $request->email;
-            $setting->footer_text = $request->footer_text;
-            $setting->newslatter_text = $request->newslatter_text;
-            $setting->headline = $request->headline;
 
-            //favicon
-            if ($request->hasFile('favicon')) {
-                if (file_exists(public_path('uploads/' . $setting->favicon))) {
-                    @unlink(public_path('uploads/' . $setting->favicon));
-                }
-                $image = $request->file('favicon');
-                $filename = 'favicon' . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('uploads/'), $filename);
-                $setting->favicon = $filename;
+        $request->validate([
+            'site_name' => 'required|string|max:255',
+        ]);
+
+        $fields = [
+            'site_name', 'site_title', 'address', 'address2', 'phone', 'email',
+            'footer_text', 'newslatter_text', 'facebook', 'twitter', 'instagram',
+            'youtube', 'linkedin', 'pinterest', 'google_map', 'meta_title',
+            'headline', 'meta_description', 'meta_keywords', 'terms_and_conditions',
+            'privacy_policy'
+        ];
+
+        foreach($fields as $field) {
+            $setting->$field = $request->$field;
+        }
+
+        //favicon
+        if ($request->hasFile('favicon')) {
+            if ($setting->favicon && file_exists(public_path('uploads/' . $setting->favicon))) {
+                @unlink(public_path('uploads/' . $setting->favicon));
             }
+            $image = $request->file('favicon');
+            $filename = 'favicon_' . time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/'), $filename);
+            $setting->favicon = $filename;
+        }
 
-            //logo
-            if ($request->hasFile('logo')) {
-                if (file_exists(public_path('uploads/' . $setting->logo))) {
-                    @unlink(public_path('uploads/' . $setting->logo));
-                }
-                $image = $request->file('logo');
-                $filename = 'logo' . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('uploads/'), $filename);
-                $setting->logo = $filename;
+        //logo
+        if ($request->hasFile('logo')) {
+            if ($setting->logo && file_exists(public_path('uploads/' . $setting->logo))) {
+                @unlink(public_path('uploads/' . $setting->logo));
             }
-
-            toast('Basic information updated successfully!', 'success');
-        }
-
-        // social media links
-        if ($request->update_section == 'social') {
-            $setting->facebook = $request->facebook;
-            $setting->twitter = $request->twitter;
-            $setting->instagram = $request->instagram;
-            $setting->youtube = $request->youtube;
-            $setting->linkedin = $request->linkedin;
-            $setting->pinterest = $request->pinterest;
-
-            toast('Social media links updated successfully!', 'success');
-        }
-
-        // seo
-        if ($request->update_section == 'seo') {
-            $setting->meta_title = $request->meta_title;
-            $setting->meta_description = $request->meta_description;
-            $setting->meta_keywords = json_encode($request->meta_keywords);
-
-            toast('SEO updated successfully!', 'success');
-        }
-
-        // google_map
-        if ($request->update_section == 'google_map') {
-            $setting->google_map = $request->google_map;
-            toast('Google map updated successfully!', 'success');
+            $image = $request->file('logo');
+            $filename = 'logo_' . time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/'), $filename);
+            $setting->logo = $filename;
         }
 
         $setting->save();
+        toast('Settings updated successfully!', 'success');
         return redirect()->route('settings.index');
     }
 }

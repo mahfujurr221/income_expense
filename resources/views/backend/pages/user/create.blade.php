@@ -1,103 +1,134 @@
 @extends('backend.layouts.master')
+
+@section('title', 'Create User')
+
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-6">
-                <h4 class="card-title">User Create</h4>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Header section -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold text-dark mb-1">Create User</h3>
+                    <p class="text-muted small mb-0">Add a new user to the system</p>
+                </div>
+                <div>
+                    <a href="{{ route('users.index') }}" class="btn btn-light rounded-pill px-4 fw-bold">
+                        <i class="bx bx-arrow-back me-2"></i>Back to List
+                    </a>
+                </div>
             </div>
-            <div class="col-md-6 text-end">
-                <a class="btn btn-primary" href="{{ route('users.index') }}" title="User List">
-                    <i class="bi bi-list"></i> User List</a>
-                </a>
-            </div>
+
+            <form action="{{ route('users.store') }}" method="POST">
+                @csrf
+
+                <x-premium.card bodyClass="p-4">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <h6 class="text-primary text-uppercase fw-bold mb-3 small border-bottom pb-2">Personal
+                                Information</h6>
+                        </div>
+
+                        {{-- Name Fields --}}
+                        <div class="col-md-6">
+                            <x-premium.input label="First Name" name="fname" placeholder="Ex: John" :value="old('fname')"
+                                required="true" />
+                            @error('fname')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <x-premium.input label="Last Name" name="lname" placeholder="Ex: Doe" :value="old('lname')"
+                                required="true" />
+                            @error('lname')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- Contact Info --}}
+                        <div class="col-md-6">
+                            <x-premium.input type="email" label="Email Address" name="email"
+                                placeholder="email@example.com" :value="old('email')" required="true" />
+                            @error('email')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <x-premium.input label="Phone Number" name="phone" placeholder="Ex: 01700000000"
+                                :value="old('phone')" required="true" />
+                            @error('phone')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <h6 class="text-primary text-uppercase fw-bold mb-3 small border-bottom pb-2">Access & Security
+                            </h6>
+                        </div>
+
+                        {{-- Role --}}
+                        <div class="col-md-12">
+                            <x-premium.select label="User Role" name="role" required="true" isSelect2="true">
+                                <option value="">Select Role</option>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->name }}"
+                                        {{ old('role') == $role->name ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
+                            </x-premium.select>
+                            @error('role')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- Password --}}
+                        <div class="col-md-6">
+                            <x-premium.input type="password" label="Password" name="password" placeholder="••••••••"
+                                required="true" />
+                            @error('password')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <x-premium.input type="password" label="Confirm Password" name="password_confirmation"
+                                placeholder="••••••••" required="true" />
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 text-end border-top">
+                        <button type="submit" class="btn btn-primary px-5 rounded-pill fw-bold shadow-sm">
+                            <i class="bx bx-save me-2"></i>Create User
+                        </button>
+                    </div>
+                </x-premium.card>
+            </form>
         </div>
     </div>
-    <form action="{{ route('users.store') }}" method="POST">
-        @csrf
-        <div class="card-body">
-            <div class="mt-3 row">
-
-                <div class="mb-2 col-md-6">
-                    <label class="form-label">Frist Name<span class="text-danger">*</span></label>
-                    <input class="form-control {{ $errors->has('fname') ? 'is-invalid' : '' }}" type="text" name="fname"
-                        placeholder="Enter First Name" value="{{ old('fname') }}" required>
-
-                    @if($errors->has('fname'))
-                    <div class="invalid-feedback">{{ $errors->first('fname') }}</div>
-                    @endif
-                </div>
-
-                <div class="mb-2 col-md-6">
-                    <label class="form-label">Last Name<span class="text-danger">*</span></label>
-                    <input class="form-control {{ $errors->has('lname') ? 'is-invalid' : '' }}" type="text" name="lname"
-                        placeholder="Enter Last Name" value="{{ old('lname') }}">
-
-                    @if($errors->has('lname'))
-                    <div class="invalid-feedback">{{ $errors->first('lname') }}</div>
-                    @endif
-                </div>
-
-                <div class="mb-2 col-md-6">
-                    <label class="form-label">Email<span class="text-danger">*</span></label>
-                    <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="text" name="email"
-                        placeholder="Enter Login Email." value="{{ old('email') }}">
-
-                    @if($errors->has('email'))
-                    <div class="invalid-feedback">{{ $errors->first('email') }}</div>
-                    @endif
-                </div>
-
-                <div class="mb-2 col-md-6">
-                    <label class="form-label">Phone<span class="text-danger">*</span></label>
-                    <input type="number" class="form-control{{ $errors->has('phone') ? 'is-invalid' : '' }}" name="phone"
-                        value="{{ old('phone') }}">
-                    @if($errors->has('phone'))
-                    <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
-                    @endif
-                </div>
-
-                <div class="mb-2 col-md-6">
-                    <label class="form-label">Password<span class="text-danger">*</span></label>
-                    <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password"
-                        name="password" placeholder="******">
-                    @if($errors->has('password'))
-                    <div class="invalid-feedback">{{ $errors->first('password') }}</div>
-                    @endif
-                </div>
-
-                <div class="mb-2 col-md-6">
-                    <label class="form-label">Password Confirmation<span class="text-danger">*</span></label>
-                    <input class="form-control {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}"
-                        type="password" name="password_confirmation" placeholder="******">
-
-                    @if($errors->has('password_confirmation'))
-                    <div class="invalid-feedback">{{ $errors->first('password_confirmation') }}</div>
-                    @endif
-                </div>
-
-                <div class="mb-2 col-md-4">
-                    <label class="form-label">Role<span class="text-danger">*</span></label>
-                    <select name="role" class="form-control {{ $errors->has('role') ? 'is-invalid' : '' }} select2"
-                        data-placeholder="Select Role" multiple required>
-                        @foreach ($roles as $role)
-                        <option {{ old('role')==$role->name? 'selected' : '' }} value="{{ $role->name }}">{{ $role->name
-                            }}</option>
-                        @endforeach
-                    </select>
-                    @if($errors->has('role'))
-                    <div class="invalid-feedback">{{ $errors->first('role') }}</div>
-                    @endif
-                </div>
-            </div>
-        </div>
-        <div class="py-3 text-center card-footer">
-            <button type="submit" class="btn btn-primary">Create User</button>
-        </div>
-    </form>
-</div>
-
 @endsection
 
+@push('css')
+    <style>
+        :root {
+            --primary-accent: #4f46e5;
+            --bg-body: #f8fafc;
+        }
+
+        body {
+            background-color: var(--bg-body);
+        }
+    </style>
+@endpush
+
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                width: '100%',
+                dropdownParent: $('body')
+            });
+        });
+    </script>
 @endpush

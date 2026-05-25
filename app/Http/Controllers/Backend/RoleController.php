@@ -88,11 +88,17 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
         $groupedPermissions = $permissions->groupBy(function ($permission) {
-            // return explode('-', $permission->name)[1];
-            if (strpos($permission->name, '-') !== false) {
-                return explode('-', $permission->name)[1];
+            $name = $permission->name;
+
+            // If it starts with report-, group it under Reports
+            if (str_starts_with($name, 'report-')) {
+                return 'Reports';
+            }
+
+            if (strpos($name, '-') !== false) {
+                return explode('-', $name)[1];
             } else {
-                return $permission->name;
+                return $name;
             }
         });
         // dd($groupedPermissions);

@@ -1,309 +1,354 @@
 @extends('backend.layouts.master')
 
+@section('title', 'System Settings')
+
 @section('content')
-<div class="row">
-    <div class="col-lg-7 col-xl-9 ">
-        <div class="tab-content" id="v-pills-tabContent">
-            {{-- Basic Information --}}
-            <div class="tab-pane fade show active" id="v-pills-basic-information" role="tabpanel"
-                aria-labelledby="v-pills-basic-information-tab">
-                <div class="card m-b-30">
-                    <div class="card-header">
-                        <h5 class="mb-0 card-title">Edit Basic Information</h5>
+    <div class="row">
+        <div class="col-12">
+            <form action="{{ route('settings.update', $setting->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                <!-- Header Area -->
+                <div class="d-flex justify-content-between align-items-center mb-5 mt-2">
+                    <div>
+                        <h2 class="fw-bold mb-1 text-dark">Settings</h2>
+                        <p class="text-muted mb-0">Manage your business configuration and appearance</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary px-5 py-3 shadow-lg rounded-pill fw-bold border-0"
+                        style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);">
+                        <i class="feather icon-save me-2"></i> Save All Settings
+                    </button>
+                </div>
+
+                <div class="row">
+                    <!-- Navigation Sidebar -->
+                    <div class="col-xl-3 col-lg-4 mb-4">
+                        <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
+                            <div class="card-body p-3">
+                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                                    aria-orientation="vertical">
+                                    <button
+                                        class="nav-link active text-start py-3 px-4 rounded-3 mb-2 fw-semibold d-flex align-items-center"
+                                        id="nav-general-tab" data-bs-toggle="pill" data-bs-target="#nav-general"
+                                        type="button" role="tab">
+                                        <i class="feather icon-info me-3 h5 mb-0"></i> General Info
+                                    </button>
+                                    <button
+                                        class="nav-link text-start py-3 px-4 rounded-3 mb-2 fw-semibold d-flex align-items-center"
+                                        id="nav-branding-tab" data-bs-toggle="pill" data-bs-target="#nav-branding"
+                                        type="button" role="tab">
+                                        <i class="feather icon-image me-3 h5 mb-0"></i> Branding & Content
+                                    </button>
+                                    <button
+                                        class="nav-link text-start py-3 px-4 rounded-3 mb-2 fw-semibold d-flex align-items-center"
+                                        id="nav-social-tab" data-bs-toggle="pill" data-bs-target="#nav-social"
+                                        type="button" role="tab">
+                                        <i class="feather icon-share-2 me-3 h5 mb-0"></i> Social Links
+                                    </button>
+                                    <button
+                                        class="nav-link text-start py-3 px-4 rounded-3 mb-2 fw-semibold d-flex align-items-center"
+                                        id="nav-seo-tab" data-bs-toggle="pill" data-bs-target="#nav-seo"
+                                        type="button" role="tab">
+                                        <i class="feather icon-search me-3 h5 mb-0"></i> SEO Settings
+                                    </button>
+                                    <button
+                                        class="nav-link text-start py-3 px-4 rounded-3 mb-0 fw-semibold d-flex align-items-center"
+                                        id="nav-policies-tab" data-bs-toggle="pill" data-bs-target="#nav-policies"
+                                        type="button" role="tab">
+                                        <i class="feather icon-shield me-3 h5 mb-0"></i> Policies
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3 card-body">
-                        <form action="{{ route('settings.update', $setting->id) }}" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="update_section" value="basic_information">
-                            <div class="row">
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom01" class="form-label font-weight-bold">
-                                        Website Name</label>
-                                    <input type="text" class="form-control" id="validationCustom01" name="site_name"
-                                        value="{{ $setting->site_name }}">
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom02" class="form-label font-weight-bold">
-                                        Website Title</label>
-                                    <input type="text" class="form-control" id="validationCustom02" name="site_title"
-                                        value="{{ $setting->site_title }}">
-                                </div>
+                    <!-- Content Area -->
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="tab-content border-0" id="v-pills-tabContent">
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom05" class="form-label font-weight-bold">
-                                        Website Logo</label>
-                                    <input class="mr-5 form-control" id="validationCustom05" type="file" name="logo"
-                                        accept="image/*">
-                                    <img style="max-width: 100px; max-height: 100px; margin-top:10px" id="logo"
-                                        src="{{ asset('uploads') }}/{{ $setting->logo }}"
-                                        alt="{{ $setting->site_name }}" />
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom06" class="form-label font-weight-bold">
-                                        Website Favicon</label>
-                                    <input class="mr-5 form-control" id="validationCustom06" type="file" name="favicon"
-                                        accept="image/*">
-                                    <img style="max-width: 70px; max-height: 70px; margin-top:10px" id="favicon"
-                                        src="{{ asset('uploads') }}/{{ $setting->favicon }}"
-                                        alt="{{ $setting->site_name }}" />
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom07" class="form-label font-weight-bold">
-                                        Phone Number</label>
-                                    <input type="text" class="form-control" id="validationCustom07" name="phone"
-                                        value="{{ $setting->phone }}">
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom08" class="form-label font-weight-bold">
-                                        Email Address</label>
-                                    <input type="text" class="form-control" id="validationCustom08" name="email"
-                                        value="{{ $setting->email }}">
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom08" class="form-label font-weight-bold">
-                                        Footer Text</label>
-                                    <input type="text" class="form-control" id="validationCustom08" name="footer_text"
-                                        value="{{ $setting->footer_text }}">
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom08" class="form-label font-weight-bold">
-                                        Newslatter Text</label>
-                                    <input type="text" class="form-control" id="validationCustom08"
-                                        name="newslatter_text" value="{{ $setting->newslatter_text }}">
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom08" class="form-label font-weight-bold">
-                                        Headline</label>
-                                    <input type="text" class="form-control" id="validationCustom08" name="headline"
-                                        value="{{ $setting->headline }}">
-                                </div>
-
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="validationCustom03" class="form-label font-weight-bold">
-                                        Website Address</label>
-                                    <textarea class="form-control" id="validationCustom03" rows="3"
-                                        name="address">{{ $setting->address }}</textarea>
-                                </div>
-                                <div class="mb-3 col-md-6" hidden>
-                                    <label for="validationCustom04" class="form-label font-weight-bold">
-                                        Website Address2</label>
-                                    <input type="text" class="form-control" id="validationCustom04" name="address2"
-                                        value="{{ $setting->address2 }}">
+                            <!-- General Info Section -->
+                            <div class="tab-pane fade show active" id="nav-general" role="tabpanel">
+                                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                                    <h4 class="fw-bold mb-4">Business Information</h4>
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Site Name</label>
+                                                <input type="text" class="form-control" name="site_name"
+                                                    value="{{ $setting->site_name }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Site Title</label>
+                                                <input type="text" class="form-control" name="site_title"
+                                                    value="{{ $setting->site_title }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Contact Phone</label>
+                                                <input type="text" class="form-control" name="phone"
+                                                    value="{{ $setting->phone }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Email Address</label>
+                                                <input type="email" class="form-control" name="email"
+                                                    value="{{ $setting->email }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Address 1</label>
+                                                <textarea class="form-control" name="address" rows="2">{{ $setting->address }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Address 2</label>
+                                                <textarea class="form-control" name="address2" rows="2">{{ $setting->address2 }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Google Map iframe</label>
+                                                <textarea class="form-control" name="google_map" rows="3">{{ $setting->google_map }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mt-3 text-center col-md-12">
-                                <button type="submit" class="btn btn-primary font-16">
-                                    Update
-                                </button>
+
+                            <!-- Branding Section -->
+                            <div class="tab-pane fade" id="nav-branding" role="tabpanel">
+                                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 text-center">
+                                    <h4 class="fw-bold mb-4 text-start">Branding Assets</h4>
+                                    <div class="row g-5 mb-4">
+                                        <div class="col-md-7">
+                                            <div class="p-4 rounded-4 border-2 border-dashed bg-light">
+                                                <h6 class="fw-bold mb-3">Main Business Logo</h6>
+                                                <div class="preview-box mb-3 p-3 bg-white rounded border d-inline-block">
+                                                    <img id="logo-preview"
+                                                        src="{{ $setting->logo ? asset('uploads/' . $setting->logo) : asset('backend/assets/images/logo.png') }}"
+                                                        class="img-fluid" style="max-height: 100px;">
+                                                </div>
+                                                <input type="file" class="form-control form-control-sm" name="logo"
+                                                    id="logo-input" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="p-4 rounded-4 border-2 border-dashed bg-light">
+                                                <h6 class="fw-bold mb-3">Site Favicon</h6>
+                                                <div class="preview-box mb-3 p-3 bg-white rounded border d-inline-block">
+                                                    <img id="favicon-preview"
+                                                        src="{{ $setting->favicon ? asset('uploads/' . $setting->favicon) : asset('backend/assets/images/favicon.ico') }}"
+                                                        class="img-fluid" style="width: 48px; height: 48px;">
+                                                </div>
+                                                <input type="file" class="form-control form-control-sm" name="favicon"
+                                                    id="favicon-input" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class="fw-bold mb-4 text-start border-top pt-4">Global Content</h4>
+                                    <div class="row g-4 text-start">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Headline</label>
+                                                <textarea class="form-control" name="headline" rows="2">{{ $setting->headline }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Footer Text</label>
+                                                <textarea class="form-control" name="footer_text" rows="2">{{ $setting->footer_text }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Newsletter Text</label>
+                                                <textarea class="form-control" name="newslatter_text" rows="2">{{ $setting->newslatter_text }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+
+                            <!-- Social Links Section -->
+                            <div class="tab-pane fade" id="nav-social" role="tabpanel">
+                                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                                    <h4 class="fw-bold mb-4">Social Links</h4>
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Facebook URL</label>
+                                                <input type="url" class="form-control" name="facebook"
+                                                    value="{{ $setting->facebook }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Twitter URL</label>
+                                                <input type="url" class="form-control" name="twitter"
+                                                    value="{{ $setting->twitter }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Instagram URL</label>
+                                                <input type="url" class="form-control" name="instagram"
+                                                    value="{{ $setting->instagram }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">YouTube URL</label>
+                                                <input type="url" class="form-control" name="youtube"
+                                                    value="{{ $setting->youtube }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">LinkedIn URL</label>
+                                                <input type="url" class="form-control" name="linkedin"
+                                                    value="{{ $setting->linkedin }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Pinterest URL</label>
+                                                <input type="url" class="form-control" name="pinterest"
+                                                    value="{{ $setting->pinterest }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SEO Settings Section -->
+                            <div class="tab-pane fade" id="nav-seo" role="tabpanel">
+                                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                                    <h4 class="fw-bold mb-4">SEO & Meta</h4>
+                                    <div class="row g-4">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Meta Title</label>
+                                                <input type="text" class="form-control" name="meta_title"
+                                                    value="{{ $setting->meta_title }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Meta Keywords</label>
+                                                <input type="text" class="form-control" name="meta_keywords"
+                                                    value="{{ $setting->meta_keywords ? (is_array($setting->meta_keywords) ? implode(',', $setting->meta_keywords) : $setting->meta_keywords) : '' }}"
+                                                    placeholder="keyword1, keyword2, keyword3">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Meta Description</label>
+                                                <textarea class="form-control" name="meta_description" rows="4">{{ $setting->meta_description }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Policies Section -->
+                            <div class="tab-pane fade" id="nav-policies" role="tabpanel">
+                                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                                    <h4 class="fw-bold mb-4">Policies</h4>
+                                    <div class="row g-4">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Terms & Conditions</label>
+                                                <textarea class="form-control" name="terms_and_conditions" rows="6">{{ $setting->terms_and_conditions }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold text-dark small">Privacy Policy</label>
+                                                <textarea class="form-control" name="privacy_policy" rows="6">{{ $setting->privacy_policy }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {{-- Social --}}
-            <div class="tab-pane fade" id="v-pills-social" role="tabpanel" aria-labelledby="v-pills-social-tab">
-                <div class="card m-b-30">
-                    <div class="card-header">
-                        <h5 class="mb-2 card-title">Social Media Links</h5>
-                    </div>
-                    <div class="my-3 card-body">
-                        <form action="{{ route('settings.update', $setting->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="update_section" value="social">
-                            <div class="form-row">
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom09" class="form-label font-weight-bold">
-                                        Facebook</label>
-                                    <input type="text" class="form-control" id="validationCustom09" name="facebook"
-                                        value="{{ $setting->facebook }}">
-                                </div>
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom10" class="form-label font-weight-bold">
-                                        Twitter</label>
-                                    <input type="text" class="form-control" id="validationCustom10" name="twitter"
-                                        value="{{ $setting->twitter }}">
-                                </div>
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom11" class="form-label font-weight-bold">
-                                        Instagram</label>
-                                    <input type="text" class="form-control" id="validationCustom11" name="instagram"
-                                        value="{{ $setting->instagram }}">
-                                </div>
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom12" class="form-label font-weight-bold">
-                                        Youtube</label>
-                                    <input type="text" class="form-control" id="validationCustom12" name="youtube"
-                                        value="{{ $setting->youtube }}">
-                                </div>
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom13" class="form-label font-weight-bold">
-                                        Linkedin</label>
-                                    <input type="text" class="form-control" id="validationCustom13" name="linkedin"
-                                        value="{{ $setting->linkedin }}">
-                                </div>
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom14" class="form-label font-weight-bold">
-                                        Pinterest</label>
-                                    <input type="text" class="form-control" id="validationCustom14" name="pinterest"
-                                        value="{{ $setting->pinterest }}">
-                                </div>
-                            </div>
-                            <div class="mt-3 text-center col-md-12">
-                                <button type="submit" class="btn btn-primary font-16">
-                                    Update
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            {{-- SEO --}}
-            <div class="tab-pane fade" id="v-pills-seo" role="tabpanel" aria-labelledby="v-pills-seo-tab">
-                <div class="card m-b-30">
-                    <div class="card-header">
-                        <h5 class="mb-0 card-title">SEO</h5>
-                    </div>
-                    <div class="my-3 card-body">
-                        <form action="{{ route('settings.update', $setting->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="update_section" value="seo">
-                            <div class="form-row">
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom15" class="form-label font-weight-bold">
-                                        Meta Title</label>
-                                    <input type="text" class="form-control" id="validationCustom15" name="meta_title"
-                                        value="{{ $setting->meta_title }}">
-                                </div>
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom16" class="form-label font-weight-bold">
-                                        Meta Keywords</label>
-                                    <input type="text" class="form-control tagsinput" id="validationCustom16"
-                                        data-role="tagsinput" placeholder="Enter Meta Keywords" name="meta_keywords"
-                                        value="{{ json_decode($setting->meta_keywords) }}">
-                                </div>
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom17" class="form-label font-weight-bold">
-                                        Meta Description</label>
-                                    <textarea class="form-control" id="validationCustom17" rows="5"
-                                        placeholder="Enter Meta Description"
-                                        name="meta_description">{{ $setting->meta_description }}</textarea>
-                                </div>
-                            </div>
-                            <div class="mt-3 text-center col-md-12">
-                                <button type="submit" class="btn btn-primary font-16">
-                                    Update
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Google Map API --}}
-            <div class="tab-pane fade" id="v-pills-google-map" role="tabpanel" aria-labelledby="v-pills-google-map-tab">
-                <div class="card m-b-30">
-                    <div class="card-header">
-                        <h5 class="mb-0 card-title">Google Map</h5>
-                    </div>
-                    <div class="my-3 card-body">
-                        <form action="{{ route('settings.update', $setting->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="update_section" value="google_map">
-                            <div class="form-row">
-                                <div class="mb-3 col-md-12">
-                                    <label for="validationCustom15" class="form-label font-weight-bold">
-                                        Google Map </label>
-                                    <input type="text" class="form-control" id="validationCustom15" name="google_map"
-                                        value="{{ $setting->google_map }}">
-                                </div>
-                            </div>
-                            <div class="mt-3 text-center col-md-12">
-                                <button type="submit" class="btn btn-primary font-16">
-                                    Update
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
+            </form>
         </div>
     </div>
-
-    <!-- side nav -->
-    <div class="col-lg-5 col-xl-3">
-        <div class="card m-b-30">
-            <div class="card-header">
-                <h5 class="mb-0 card-title">Website Setting</h5>
-            </div>
-            <div class="py-3 card-body">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="mb-2 nav-link active" id="v-pills-basic-information-tab" data-toggle="pill"
-                        href="#v-pills-basic-information" role="tab" aria-controls="v-pills-basic-information"
-                        aria-selected="false">
-                        <i class="mr-2 feather icon-info"></i>
-                        Basic Information
-                    </a>
-
-                    <a class="mb-2 nav-link" id="v-pills-social-tab" data-toggle="pill" href="#v-pills-social"
-                        role="tab" aria-controls="v-pills-social" aria-selected="false">
-                        <i class="mr-2 feather icon-link"></i>
-                        Social Media Links
-                    </a>
-                    <a class="mb-2 nav-link" id="v-pills-seo-tab" data-toggle="pill" href="#v-pills-seo" role="tab"
-                        aria-controls="v-pills-seo" aria-selected="false">
-                        <i class="mr-2 feather icon-search"></i>
-                        SEO
-                    </a>
-                    <a class="nav-link" id="v-pills-google-map-tab" data-toggle="pill" href="#v-pills-google-map"
-                        role="tab" aria-controls="v-pills-google-map" aria-selected="false">
-                        <i class="mr-2 feather icon-map"></i>
-                        Google Map API
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End col -->
-</div>
 @endsection
 
+@push('css')
+    <style>
+        .nav-pills .nav-link {
+            color: #6c757d;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link:hover {
+            background: #f8f9fa;
+            color: #4e73df;
+        }
+
+        .nav-pills .nav-link.active {
+            background: #4e73df;
+            color: #fff !important;
+            box-shadow: 0 4px 15px rgba(78, 115, 223, 0.25);
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid #e3e6f0;
+            background-color: #fcfcfd;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #fff;
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.05);
+        }
+
+        .rounded-4 {
+            border-radius: 1.25rem !important;
+        }
+
+        .border-dashed {
+            border-style: dashed !important;
+        }
+
+        body {
+            background-color: #f4f7fc;
+        }
+    </style>
+@endpush
+
 @push('scripts')
-<script>
-    $(document).ready(function () {
-        $('.nav-pills a').on('click', function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-            $('.tab-content').scrollTop(0);
-        });
-    });
-    $('#validationCustom05').on('change', function() {
-        var file = this.files[0];
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            $('#logo').attr('src', reader.result);
+    <script>
+        // Logo Preview
+        document.getElementById('logo-input').onchange = function(evt) {
+            const [file] = this.files;
+            if (file) {
+                document.getElementById('logo-preview').src = URL.createObjectURL(file);
+            }
         }
-        reader.readAsDataURL(file);
-    });
-    // name="favicon"
-    $('#validationCustom06').on('change', function() {
-        var file = this.files[0];
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            $('#favicon').attr('src', reader.result);
+        // Favicon Preview
+        document.getElementById('favicon-input').onchange = function(evt) {
+            const [file] = this.files;
+            if (file) {
+                document.getElementById('favicon-preview').src = URL.createObjectURL(file);
+            }
         }
-        reader.readAsDataURL(file);
-    });
-</script>
+    </script>
 @endpush
