@@ -95,16 +95,6 @@
                 </li>
                 @endcanany
 
-                {{-- Employee ID Cards --}}
-                <li class="menu-title mt-2" data-key="t-components">Employee Management</li>
-                <li>
-                    <a href="{{ route('print.cards') }}"
-                        class="{{ Route::currentRouteName() == 'print.cards' ? 'active' : '' }}">
-                        <i data-feather="credit-card"></i>
-                        <span>Generate ID Cards</span>
-                    </a>
-                </li>
-
                 {{-- Settings --}}
                 @can('update-setting')
                 <li class="menu-title mt-2 text-secondary">Settings</li>

@@ -14,6 +14,8 @@ use App\Http\Controllers\ProfileController;
 |--------------------------------------------------------------------------
 */
 
+Route::redirect('/', '/login');
+
 Route::prefix('back')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -29,9 +31,7 @@ Route::prefix('back')->middleware(['auth'])->group(function () {
     Route::post('/profile-reset', [ProfileController::class, 'reset'])->name('profile.reset');
     Route::put('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
 
-    /////////////// Employee ID Cards ///////////////
-    Route::get('/generate-id-cards', [\App\Http\Controllers\Backend\EmployeeController::class, 'printCards'])->name('print.cards');
-    Route::get('/download-qrcode/{id}', [\App\Http\Controllers\Backend\EmployeeController::class, 'downloadQrCode'])->name('download.qrcode');
+
 
     /////////////// Settings ///////////////
     Route::resource('settings', SettingController::class)->except(['show', 'edit', 'create', 'destroy']);
